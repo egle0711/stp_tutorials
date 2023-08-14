@@ -1,4 +1,3 @@
-# Egle Girdenyte
 
 dict = {
     "AAA": "K", "AAC": "N", "AAG": "K", "AAU": "N",
