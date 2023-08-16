@@ -1,3 +1,4 @@
+# Translation functiom
 
 dict = {
     "AAA": "K", "AAC": "N", "AAG": "K", "AAU": "N",
