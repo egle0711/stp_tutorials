@@ -1,6 +1,13 @@
-# Translation functiom
+import logging
 
-dict = {
+# Set up logging
+log_file_path = "/home/egleg/uni_test/stp_tutorials/STP_Tutorials/modules/logs/app.log"
+
+logging.basicConfig(filename=log_file_path,
+                    level=logging.INFO,
+                    format='%(asctime)s [%(levelname)s] %(message)s')
+
+codon_dict = {
     "AAA": "K", "AAC": "N", "AAG": "K", "AAU": "N",
     "ACA": "T", "ACC": "T", "ACG": "T", "ACU": "T",
     "AGA": "R", "AGC": "S", "AGG": "R", "AGU": "S",
@@ -22,15 +29,30 @@ dict = {
     "UUA": "L", "UUC": "F", "UUG": "L", "UUU": "F"
 }
 
-def Translate(input):
-    # Convert T to U in input string
-    conversion = input.replace('T', 'U')
-    # Split the input string into three-letter chunks 
-    chunks = [conversion[i:i+3] for i in range(0, len(conversion), 3)]
-    # Look up each chunk in the dictionary and append the value to the translation string 
-    translation = ''.join([dict.get(chunk, '?') for chunk in chunks])
 
-    return translation
+def dna_to_rna(dna_seq):
+    """Convert DNA sequence to RNA by replacing T with U."""
+    return dna_seq.replace('T', 'U')
 
-input = 'ATGGATTTATCTGCTCTTCGCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAGTGTCCCATCTGTCTGGAGTTGATCAAGGAACCTGTCTCCACAAAGTGTGACCACATATTTTGCAAATTTTGCATGCTGAAACTTCTCAACCAGAAGAAAGGGCCTTCACAGTGTCCTTTATGTAAGAATGATATAACCAAA'
-print(Translate(input))
+def split_into_codons(seq, chunk_size=3):
+    """Split the sequence into codons and log the chunking."""
+    return [seq[i:i+chunk_size] for i in range(0, len(seq), chunk_size)]
+
+def translate_codons(codons):
+    """Translate a list of codons into their respective amino acids."""
+    return ''.join([codon_dict.get(codon, '?') for codon in codons])
+
+def Translate(input_seq):
+    rna_seq = dna_to_rna(input_seq)
+    codons = split_into_codons(rna_seq)  # default chunk size is 3, but you can adjust it
+    return translate_codons(codons)
+
+def main():
+    try:
+        input_seq = 'ATGGATTTATCTGCTCTTCGCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAGTGTCCCATCTGTCTGGAGTTGATCAAGGAACCTGTCTCCACAAAGTGTGACCACATATTTTGCAAATTTTGCATGCTGAAACTTCTCAACCAGAAGAAAGGGCCTTCACAGTGTCCTTTATGTAAGAATGATATAACCAAA'
+        logging.info('2.2: ' + Translate(input_seq))
+    except Exception as e:
+        logging.error(f"2.2: An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
